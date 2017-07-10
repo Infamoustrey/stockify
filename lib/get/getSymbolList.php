@@ -1,13 +1,13 @@
 <?php
 
-$uri = "http://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download";
+require_once '../db/quickpdo.php';
 
-$csv = array();
+$stmt_get_all_symbols = $pdo->query('SELECT * FROM stocks');
 
-$lines = file($uri, FILE_IGNORE_NEW_LINES);
-
-foreach (array_slice($lines,1) as $key => $value){
-    $csv[$key] = str_getcsv(implode(',',array_slice(explode(',',$value), 0, 2)));
+$temparr = array();
+while ($row = $stmt_get_all_symbols->fetch()){
+    array_push($temparr, [$row['symbol'], $row['companyName']]);
 }
 
-echo json_encode($csv, JSON_PRETTY_PRINT);
+
+echo json_encode($temparr,JSON_PRETTY_PRINT);
