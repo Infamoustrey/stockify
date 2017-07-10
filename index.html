@@ -11,6 +11,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.js"></script>
+
+
     <script src="script/main.js"></script>
 
 </head>
@@ -27,12 +32,10 @@
             <tr>
                 <th>Symbol</th>
                 <th>Company</th>
-                <th>Price</th>
             </tr>
-           <tr ng-repeat="item in symbolList">
+           <tr ng-repeat="item in symbolList" ng-click="showStockFocus(item[0], item[2])">
                <td>{{item[0]}}</td>
                <td>{{item[1]}}</td>
-               <td></td>
            </tr>
         </table>
 
@@ -43,7 +46,7 @@
 
             <div class="col-sm-4">
                 <ul class="pagination">
-                    <li ng-repeat="x in paginator | filter: paginatorRange">
+                    <li ng-repeat="x in paginator | filter: paginatorRange" class="{{x.active}}">
                         <a ng-click="setActivePage(x.pageNumber)" href="#">{{x.pageNumber}}</a>
                     </li>
                 </ul>
