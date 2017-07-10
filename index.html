@@ -18,10 +18,21 @@
 
     <div ng-app="stockify" ng-controller="mainController" ng-cloak>
 
-        <input ng-model="symbol" ng-change="" type="text">
-        <br/>
-
-        <p>{{getLastClose}}</p>
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th colspan="3">Number of Stocks: <strong>{{symbolList.length}}</strong></th>
+            </tr>
+            <tr>
+                <th>Symbol</th>
+                <th>Company</th>
+                <th>Price</th>
+            </tr>
+           <tr ng-repeat="item in symbolList">
+               <td>{{item[0]}}</td>
+               <td>{{item[1]}}</td>
+               <td>{{item[2]}}</td>
+           </tr>
+        </table>
 
     </div>
 
