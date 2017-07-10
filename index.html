@@ -6,9 +6,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.2.3/jquery-confirm.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -19,6 +17,8 @@
 <body>
 
     <div ng-app="stockify" ng-controller="mainController" ng-cloak>
+
+
 
         <table class="table table-bordered table-striped">
             <tr>
@@ -35,6 +35,32 @@
                <td></td>
            </tr>
         </table>
+
+        <br />
+
+        <div class="row">
+            <div class="col-sm-4"></div>
+
+            <div class="col-sm-4">
+                <ul class="pagination">
+                    <li ng-repeat="x in paginator | filter: paginatorRange">
+                        <a ng-click="setActivePage(x.pageNumber)" href="#">{{x.pageNumber}}</a>
+                    </li>
+                </ul>
+                &emsp;
+                <div class="form-group">
+                    <label>Limit</label>
+                    <div class="btn-group">
+                        <button ng-click="setResultLimit(10)" type="button" class="btn btn-default">10</button>
+                        <button ng-click="setResultLimit(50)" type="button" class="btn btn-default">50</button>
+                        <button ng-click="setResultLimit(100)" type="button" class="btn btn-default">100</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4"></div>
+
+        </div>
 
     </div>
 
