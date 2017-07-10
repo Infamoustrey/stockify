@@ -18,9 +18,10 @@
 
     <div ng-app="stockify" ng-controller="mainController" ng-cloak>
 
+        <input ng-model="symbol" ng-change="" type="text">
+        <br/>
 
-        <h1>{{companyRefArray[0].name_latest}}</h1>
-
+        <p>{{getLastClose}}</p>
 
     </div>
 
