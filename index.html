@@ -39,7 +39,7 @@
                 <li><a ng-show="userIsLoggedIn" href="#!stock-dictionary">Stock Dictionary</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a ng-click="signUp()"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li><a ng-hide="userIsLoggedIn" ng-click="signUp()" href="#"><span class="glyphicon glyphicon-user" ></span> Sign Up</a></li>
                 <li><a ng-hide="userIsLoggedIn" ng-click="authenticate()" href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
                 <li><a ng-show="userIsLoggedIn" ng-click="logOut()" href="#"><span class="glyphicon glyphicon-log-in"></span> LogOut</a></li>
             </ul>

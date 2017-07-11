@@ -26,7 +26,7 @@ stockify.config(function ($routeProvider) {
     });
 });
 
-stockify.controller('main', function($scope, $http){
+stockify.controller('main', function($scope, $http, $location){
 
     $scope.userIsLoggedIn = false;
 
@@ -36,11 +36,12 @@ stockify.controller('main', function($scope, $http){
             url: '../lib/account/logout.php'
         }).then(function success(response){
             $scope.userIsLoggedIn = false;
+            $location.path('/');
             $.alert({
                 content: response.data,
-                title: 'Success!',
+                title: 'Logging Off',
                 theme: 'modern',
-                type: 'green',
+                type: 'red',
                 backgroundDismiss: true
             });
         }, function failure(response) {
@@ -79,13 +80,7 @@ stockify.controller('main', function($scope, $http){
                             headers: {'Content-Type': 'application/x-www-form-urlencoded'}
                         }).then(function success(response){
                             $scope.userIsLoggedIn = true;
-                            $.alert({
-                                content: response.data,
-                                title: 'Success!',
-                                theme: 'modern',
-                                type: 'green',
-                                backgroundDismiss: true
-                            });
+                            $location.path('/dashboard');
                         }, function failure(response) {
                             $.alert({
                                 content: response.data,

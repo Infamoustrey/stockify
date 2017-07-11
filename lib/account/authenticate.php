@@ -12,12 +12,25 @@ $stmt_get_user_id = $pdo->prepare('SELECT * FROM users WHERE email = ?');
 $stmt_get_user_id->execute([$input_email]);
 
 $result = $stmt_get_user_id->fetch();
-$userID = $result['ID'];
+$userID = $result['id'];
 
 if(password_verify($input_password, $result['hash'])){
-    $_SESSION['userID'] = "$userID";
-    $_SESSION['loggedIn'] = 'true';
-    echo 'Successfully Logged In.';
+    $stmt_set_online = $pdo->prepare('UPDATE users SET online = 1 WHERE id = ?');
+    $stmt_set_online->execute([$userID]);
+
+    if($stmt_set_online->rowCount() == 1){
+        $_SESSION['userID'] = "$userID";
+        $_SESSION['loggedIn'] = 'true';
+        echo 'Successfully Logged In.';
+    }else{
+        header("HTTP/1.1 400 Bad Request");
+        echo 'Login Failure. Unable to Bring User Online.';
+        session_destroy();
+        unset($_SESSION['userID']);
+        unset($_SESSION['loggedIn']);
+        exit;
+    }
+
 }else{
     header("HTTP/1.1 400 Bad Request");
     echo 'Login Failure.';
