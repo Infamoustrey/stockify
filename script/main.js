@@ -4,7 +4,7 @@ String.prototype.toProperCase = function () {
 };
 
 String.prototype.replaceAll = function(search, replacement) {
-    var target = this;
+    let target = this;
     return target.split(search).join(replacement);
 };
 
@@ -17,16 +17,140 @@ stockify.config(function ($routeProvider) {
         controller: 'main'
     })
     .when('/dashboard',{
-        templateUrl: 'dashboard.html',
+        templateUrl: 'view/dashboard.html',
         controller: 'dashboard'
     })
     .when('/stock-dictionary',{
-        templateUrl: 'stock-dictionary.html',
+        templateUrl: 'view/stock-dictionary.html',
         controller: 'dictionary'
     });
 });
 
 stockify.controller('main', function($scope, $http){
+
+    $scope.userIsLoggedIn = false;
+
+    $scope.logOut = function(){
+        $http({
+            method: 'POST',
+            url: '../lib/account/logout.php'
+        }).then(function success(response){
+            $scope.userIsLoggedIn = false;
+            $.alert({
+                content: response.data,
+                title: 'Success!',
+                theme: 'modern',
+                type: 'green',
+                backgroundDismiss: true
+            });
+        }, function failure(response) {
+            $.alert({
+                content: response.data,
+                title: 'Failure!',
+                theme: 'modern',
+                type: 'red',
+                backgroundDismiss: true
+            });
+        });
+
+    };
+
+    $scope.authenticate = function(){
+
+        $.confirm({
+            title: 'Login!',
+            theme: 'modern',
+            type: 'blue',
+            content: 'url:view/templates/login.html',
+            onContentReady: function () {
+                let self = this;
+            },
+            buttons: {
+                submit: {
+                    text: 'Submit',
+                    action: function() {
+                        $http({
+                            method: 'POST',
+                            url: '../lib/account/authenticate.php',
+                            data: $.param({
+                                email: $("#email").val(),
+                                password: $("#password").val()
+                            }),
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }).then(function success(response){
+                            $scope.userIsLoggedIn = true;
+                            $.alert({
+                                content: response.data,
+                                title: 'Success!',
+                                theme: 'modern',
+                                type: 'green',
+                                backgroundDismiss: true
+                            });
+                        }, function failure(response) {
+                            $.alert({
+                                content: response.data,
+                                title: 'Failure!',
+                                theme: 'modern',
+                                type: 'red',
+                                backgroundDismiss: true
+                            });
+                        });
+                    }
+
+                },
+                cancel: function () {
+
+                },
+            }
+        });
+
+    };
+
+    $scope.signUp = function () {
+        $.confirm({
+            title: 'Login!',
+            theme: 'modern',
+            type: 'blue',
+            content: 'url:view/templates/signup.html',
+            buttons: {
+                submit: {
+                    text: 'Submit',
+                    action: function() {
+                        $http({
+                            method: 'POST',
+                            url: '../lib/account/create.php',
+                            data: $.param({
+                                email: $("#email").val(),
+                                username: $("#username").val(),
+                                password: $("#password").val()
+                            }),
+                            headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                        }).then(function success(response){
+                            $.alert({
+                                content: response.data,
+                                title: 'Success!',
+                                theme: 'modern',
+                                type: 'green',
+                                backgroundDismiss: true
+                            });
+                        }, function failure(response) {
+                            $.alert({
+                                content: response.data,
+                                title: 'Failure!',
+                                theme: 'modern',
+                                type: 'red',
+                                backgroundDismiss: true
+                            });
+                        });
+                    }
+
+                },
+                cancel: function () {
+
+                },
+            }
+        });
+    }
 
 });
 
@@ -51,7 +175,7 @@ stockify.controller('dictionary', function($scope, $http){
         let textColor = '';
         if(stock.change.indexOf('-') > 1) {textColor='danger'}else{textColor='success'}
 
-        let html_title = symbol + ' - ' + stock.name + ' <span class="text-' + textColor +'">' + stock.change + '</span>';
+        let html_title = '<h3>'+ symbol + ' - ' + stock.name + ' <span class="text-' + textColor +'">' + stock.change + '</span></h3>';
         let html_body = '<table class="table table-bordered table-striped">';
 
             for(let propName in stock){
@@ -69,7 +193,6 @@ stockify.controller('dictionary', function($scope, $http){
       $.alert({
           title: html_title,
           content: html_body,
-          columnClass: 'large',
           backgroundDismiss: true
       });
     };
