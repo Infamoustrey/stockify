@@ -1,0 +1,64 @@
+<div>
+
+    <br />
+
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label style="display: inline-block;">Search:</label>
+                <input style="display: inline-block; width: auto;" type="text" ng-model="searchTerm" ng-change="reloadStockData()" class="form-control" >
+            </div>
+        </div>
+        <div class="col-sm-4"></div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th colspan="3">Results: <strong></strong></th>
+                </tr>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Exchange</th>
+                    <th>Company</th>
+                </tr>
+                <tr ng-repeat="item in symbolList" ng-click="showStockFocus(item[0], item[2])">
+                    <td>{{item[0]}}</td>
+                    <td>{{item[2][item[0]].stock_exchange}}</td>
+                    <td>{{item[1]}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <br />
+    <br />
+
+    <div class="row">
+        <div class="col-sm-4"></div>
+
+        <div class="col-sm-4 text-center">
+            <ul class="pagination">
+                <li ng-repeat="x in paginator | filter: paginatorRange" class="{{x.active}}">
+                    <a ng-click="setActivePage(x.pageNumber)" href="#">{{x.pageNumber}}</a>
+                </li>
+            </ul>
+            <br />
+            <div class="form-group">
+                <label>Limit</label>
+                <div class="btn-group">
+                    <button ng-click="setResultLimit(10)" type="button" class="btn btn-default">10</button>
+                    <button ng-click="setResultLimit(50)" type="button" class="btn btn-default">50</button>
+                    <button ng-click="setResultLimit(100)" type="button" class="btn btn-default">100</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4"></div>
+
+    </div>
+
+</div>

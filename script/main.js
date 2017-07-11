@@ -1,8 +1,40 @@
 
-let app = angular.module('stockify', []);
+String.prototype.toProperCase = function () {
+    return this.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+};
 
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+};
 
-app.controller('mainController', function($scope, $http){
+let stockify = angular.module('stockify', ["ngRoute"]);
+
+stockify.config(function ($routeProvider) {
+    $routeProvider
+    .when('/',{
+        template: '',
+        controller: 'main'
+    })
+    .when('/dashboard',{
+        templateUrl: 'dashboard.html',
+        controller: 'dashboard'
+    })
+    .when('/stock-dictionary',{
+        templateUrl: 'stock-dictionary.html',
+        controller: 'dictionary'
+    });
+});
+
+stockify.controller('main', function($scope, $http){
+
+});
+
+stockify.controller('dashboard', function($scope, $http){
+
+});
+
+stockify.controller('dictionary', function($scope, $http){
 
 
     $scope.symbolList = [];
@@ -10,28 +42,35 @@ app.controller('mainController', function($scope, $http){
     $scope.resultPage = 1;
     $scope.pageCount = 1;
     $scope.paginator = [];
+    $scope.searchTerm = '';
 
 
-    $scope.showStockFocus = function (symbol, raw) {
+    $scope.showStockFocus = function (symbol, stockData) {
 
-        let stockData = JSON.parse(raw);
+        let stock = stockData[symbol];
         let textColor = '';
-        if(stockData[symbol].change.indexOf('-') > 1) {textColor='danger'}else{textColor='success'}
+        if(stock.change.indexOf('-') > 1) {textColor='danger'}else{textColor='success'}
 
-        let html_title = symbol + ' - ' + stockData[symbol].name + ' <span class="text-' + textColor +'">' + stockData[symbol].change + '</span>';
-        let html_body = '<table class="table table-bordered table-striped">' +
-            '<tr>' +
-                '<td>Price</td>' +
-                '<td>' + stockData[symbol].price + '</td>' +
-            '</tr>';
+        let html_title = symbol + ' - ' + stock.name + ' <span class="text-' + textColor +'">' + stock.change + '</span>';
+        let html_body = '<table class="table table-bordered table-striped">';
+
+            for(let propName in stock){
+                if(stock.hasOwnProperty(propName)) {
+                    html_body +=
+                        '<tr>' +
+                        '<td>' + propName.replaceAll('_',' ').toProperCase() + '</td>' +
+                        '<td>' + stock[propName] + '</td>' +
+                        '</tr>';
+                }
+            }
+
 
 
       $.alert({
           title: html_title,
           content: html_body,
           columnClass: 'large',
-          backgroundDismiss: true,
-          draggable: true
+          backgroundDismiss: true
       });
     };
 
@@ -75,18 +114,17 @@ app.controller('mainController', function($scope, $http){
 
         let newIndex = newPageNumber-1;
 
-        $scope.paginator[$scope.activePage()].active = '';
+        $scope.paginator[$scope.activePage()-1].active = '';
         $scope.paginator[newIndex].active = 'active';
         $scope.reloadStockData();
     };
 
     $scope.reloadStockData = function () {
-        $http.get('../lib/get/getStockData.php?p='+$scope.activePage()+'&l='+$scope.resultLimit).then(function(response){
+        $http.get('../lib/get/getStockData.php?p='+$scope.activePage()+'&l='+$scope.resultLimit+'&s='+$scope.searchTerm).then(function(response){
             if(response.status === 200){
                 $scope.symbolList = response.data;
-
-                for(let i = 0; i < $scope.symbolList.length; i ++){
-
+                for(let i = 0; i < $scope.symbolList.length; i++){
+                    $scope.symbolList[i][2] = JSON.parse($scope.symbolList[i][2]);
                 }
             }
         });
@@ -97,7 +135,7 @@ app.controller('mainController', function($scope, $http){
         for(let i = 0; i < $scope.paginator.length; i++){
             if($scope.paginator[i].active ==='active'){index=i;}
         }
-        return index;
+        return index+1;
     };
 
     $scope.paginatorRange = function (page) {
@@ -108,18 +146,17 @@ app.controller('mainController', function($scope, $http){
         if(active > 5){
             return page.pageNumber > min && page.pageNumber < max;
         }else{
-            return page.pageNumber < 10
+            return page.pageNumber < 10;
         }
 
 
     };
 
-    $http.get('../lib/get/getStockData.php?p='+$scope.resultPage+'&l='+$scope.resultLimit).then(function(response){
+    $http.get('../lib/get/getStockData.php?p='+$scope.resultPage+'&l='+$scope.resultLimit+'&s='+$scope.searchTerm).then(function(response){
         if(response.status === 200){
             $scope.symbolList = response.data;
-
-            for(let i = 0; i < $scope.symbolList.length; i ++){
-
+            for(let i = 0; i < $scope.symbolList.length; i++){
+                $scope.symbolList[i][2] = JSON.parse($scope.symbolList[i][2]);
             }
         }
     });
@@ -137,8 +174,7 @@ app.controller('mainController', function($scope, $http){
             });
         }
 
-        $scope.paginator[0] = {pageNumber: 1,
-            active: 'active'}
+        $scope.paginator[0] = {pageNumber: 1, active: 'active'};
 
     });
 

@@ -2,7 +2,7 @@
 
 $host = 'localhost';
 $db   = 'stockify';
-$user = 'treyfoster';
+$user = 'treyfoster'; 
 $pass = 'Sultans@Swing99';
 $charset = 'utf8';
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
