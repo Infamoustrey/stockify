@@ -1,0 +1,58 @@
+
+<div style="padding: 1em;">
+
+    <div class="row" >
+        <div class="col-sm-1"></div>
+
+        <div class="col-sm-10">
+
+            <h1>Welcome to your Account Page.</h1>
+            <h1><small>Here you can adjust account settings and other behaviors for your account.</small></h1>
+
+            <br />
+            <br />
+
+            <div class="row">
+
+                <div class="col-sm-6">
+
+                    <div>
+                        <label style="display: inline-block;vertical-align: middle;margin-top: 0;margin-bottom: 0;">Emails Alerts</label>
+                        <label class="switch" style="display: inline-block;vertical-align: middle;float:right">
+                            <input ng-change="setUserPrefs()" ng-model="user_prefs.email_alerts" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <br />
+                    <br />
+
+                    <div>
+                        <label style="display: inline-block;vertical-align: middle;margin-top: 0;margin-bottom: 0;">You are Cool</label>
+                        <label class="switch" style="display: inline-block;vertical-align: middle;float:right">
+                            <input ng-change="setUserPrefs()" ng-model="user_prefs.isCool" type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <br />
+                    <br />
+
+                    <div class="form-group">
+                        <label style="display: inline-block;vertical-align: middle;margin-top: 0;margin-bottom: 0;">Favorite Color</label>
+                        <input ng-change="setUserPrefs()" ng-model="user_prefs.favorite_color" class="form-control" style="width:auto;display: inline-block;vertical-align: middle;float:right">
+                    </div>
+
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+        <div class="col-sm-1"></div>
+    </div>
+
+</div>

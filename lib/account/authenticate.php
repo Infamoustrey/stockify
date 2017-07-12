@@ -18,18 +18,9 @@ if(password_verify($input_password, $result['hash'])){
     $stmt_set_online = $pdo->prepare('UPDATE users SET online = 1 WHERE id = ?');
     $stmt_set_online->execute([$userID]);
 
-    if($stmt_set_online->rowCount() == 1){
-        $_SESSION['userID'] = "$userID";
-        $_SESSION['loggedIn'] = 'true';
-        echo 'Successfully Logged In.';
-    }else{
-        header("HTTP/1.1 400 Bad Request");
-        echo 'Login Failure. Unable to Bring User Online.';
-        session_destroy();
-        unset($_SESSION['userID']);
-        unset($_SESSION['loggedIn']);
-        exit;
-    }
+    $_SESSION['userID'] = "$userID";
+    $_SESSION['loggedIn'] = 'true';
+    echo 'Successfully Logged In.';
 
 }else{
     header("HTTP/1.1 400 Bad Request");

@@ -10,7 +10,7 @@ String.prototype.replaceAll = function(search, replacement) {
 
 let stockify = angular.module('stockify', ["ngRoute"]);
 
-stockify.config(function ($routeProvider) {
+stockify.config(function ($routeProvider, $locationProvider) {
     $routeProvider
     .when('/',{
         template: '',
@@ -23,10 +23,47 @@ stockify.config(function ($routeProvider) {
     .when('/stock-dictionary',{
         templateUrl: 'view/stock-dictionary.html',
         controller: 'dictionary'
-    });
+    })
+    .when('/account',{
+        templateUrl: 'view/account.html',
+        controller: 'account'
+    })
+    .otherwise({redirectTo: '/'});
+
+    $locationProvider.html5Mode({enabled: true, requireBase: false});
 });
 
-stockify.controller('main', function($scope, $http, $location){
+stockify.controller('main', function($scope, $http, $location, $window){
+
+    $http({
+        method: 'get',
+        url: '../lib/account/isLoggedIn.php'
+    }).then(function success(response){
+        if(response.data === 'true'){
+            $scope.userIsLoggedIn = true;
+        }else {
+            $scope.userIsLoggedIn = false;
+            $location.path('/');
+        }
+
+    }, function failure(response) {
+        $scope.userIsLoggedIn = false;
+        $location.path('/');
+        console.log('');
+    });
+
+    $scope.getClass = function (path) {
+        if ($location.path().substr(0, path.length) == path) {
+            if (path == "/" && $location.path() == "/") {
+                return "active";
+            } else if (path == "/") {
+                return "";
+            }
+            return "active";
+        } else {
+            return "";
+        }
+    };
 
     $scope.userIsLoggedIn = false;
 
@@ -62,6 +99,7 @@ stockify.controller('main', function($scope, $http, $location){
             title: 'Login!',
             theme: 'modern',
             type: 'blue',
+            backgroundDismiss: true,
             content: 'url:view/templates/login.html',
             onContentReady: function () {
                 let self = this;
@@ -106,6 +144,7 @@ stockify.controller('main', function($scope, $http, $location){
             title: 'Login!',
             theme: 'modern',
             type: 'blue',
+            backgroundDismiss: true,
             content: 'url:view/templates/signup.html',
             buttons: {
                 submit: {
@@ -146,6 +185,40 @@ stockify.controller('main', function($scope, $http, $location){
             }
         });
     }
+
+});
+
+stockify.controller('account', function($scope, $http, $location){
+
+    $scope.user_prefs = {
+        email_alerts: false,
+        isCool: true,
+        favorite_color: 'magenta'
+    };
+
+    $scope.setUserPrefs = function () {
+        $http.post('../lib/set/setUserPrefs.php', $scope.user_prefs).then(function(response){});
+    };
+
+    $http.get('../lib/get/getUserPrefs.php').then(function(response){
+        if(response.status === 200){
+            if(response.data !== ''){
+                let user_pref = response.data;
+                if(Object.keys(user_pref).length === 0 && obj.constructor === Object){
+                    $.alert('Failed to load user preferences, attempting to reset.');
+                    $scope.setUserPrefs();
+                }else{
+                    $scope.user_prefs = user_pref;
+                }
+            }else{
+                $.alert('Failed to load user preferences, attempting to reset.');
+                $scope.setUserPrefs();
+            }
+        }else{
+            $.alert('Failed to load user preferences, attempting to reset.');
+            $scope.setUserPrefs();
+        }
+    });
 
 });
 

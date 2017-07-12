@@ -5,10 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+
     <link rel="stylesheet" href="css/style.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-route.min.js"></script>
@@ -34,9 +37,10 @@
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Home</a></li>
-                <li><a ng-show="userIsLoggedIn" href="#!dashboard">Dashboard</a></li>
-                <li><a ng-show="userIsLoggedIn" href="#!stock-dictionary">Stock Dictionary</a></li>
+                <li ng-class="getClass('/')"><a href="/">Home</a></li>
+                <li ng-class="getClass('/dashboard')"><a ng-show="userIsLoggedIn" href="/dashboard">Dashboard</a></li>
+                <li ng-class="getClass('/stock-dictionary')"><a ng-show="userIsLoggedIn" href="/stock-dictionary">Stock Dictionary</a></li>
+                <li ng-class="getClass('/account')"><a ng-show="userIsLoggedIn" href="/account">Account</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li><a ng-hide="userIsLoggedIn" ng-click="signUp()" href="#"><span class="glyphicon glyphicon-user" ></span> Sign Up</a></li>

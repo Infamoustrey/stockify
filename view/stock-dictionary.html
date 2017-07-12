@@ -1,4 +1,4 @@
-<div>
+<div style="padding: 1em;">
 
     <br />
 
@@ -7,7 +7,7 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <label style="display: inline-block;">Search:</label>
-                <input style="display: inline-block; width: auto;" type="text" ng-model="searchTerm" ng-change="reloadStockData()" class="form-control" >
+                <input style="display: inline-block; width: auto;" type="text" ng-model="searchTerm" ng-change="reloadStockData();setActivePage(1)" class="form-control" >
             </div>
         </div>
         <div class="col-sm-4"></div>
@@ -48,7 +48,7 @@
             </ul>
             <br />
             <div class="form-group">
-                <label>Limit</label>
+                <label>Limit</label> <br />
                 <div class="btn-group">
                     <button ng-click="setResultLimit(10)" type="button" class="btn btn-default">10</button>
                     <button ng-click="setResultLimit(50)" type="button" class="btn btn-default">50</button>
