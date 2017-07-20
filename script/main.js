@@ -33,7 +33,9 @@ stockify.config(function ($routeProvider, $locationProvider) {
     $locationProvider.html5Mode({enabled: true, requireBase: false});
 });
 
-stockify.controller('main', function($scope, $http, $location, $window){
+stockify.controller('main', function($scope, $http, $location, $q){
+
+
 
     $http({
         method: 'get',
@@ -226,7 +228,7 @@ stockify.controller('dashboard', function($scope, $http){
 
 });
 
-stockify.controller('dictionary', function($scope, $http){
+stockify.controller('dictionary', function($scope, $http, $q){
 
 
     $scope.symbolList = [];
@@ -311,14 +313,21 @@ stockify.controller('dictionary', function($scope, $http){
     };
 
     $scope.reloadStockData = function () {
-        $http.get('../lib/get/getStockData.php?p='+$scope.activePage()+'&l='+$scope.resultLimit+'&s='+$scope.searchTerm).then(function(response){
-            if(response.status === 200){
-                $scope.symbolList = response.data;
-                for(let i = 0; i < $scope.symbolList.length; i++){
-                    $scope.symbolList[i][2] = JSON.parse($scope.symbolList[i][2]);
+
+        $q(function (resolve, reject) {
+            $http.get('../lib/get/getStockData.php?p='+$scope.activePage()+'&l='+$scope.resultLimit+'&s='+$scope.searchTerm).then(function(response){
+                if(response.status === 200){
+                    $scope.symbolList = response.data;
+                    for(let i = 0; i < $scope.symbolList.length; i++){
+                        $scope.symbolList[i][2] = JSON.parse($scope.symbolList[i][2]);
+                    }
+                    resolve();
+                }else{
+                    reject();
                 }
-            }
+            });
         });
+
     };
 
     $scope.activePage = function(){

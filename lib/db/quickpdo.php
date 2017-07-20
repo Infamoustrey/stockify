@@ -2,8 +2,8 @@
 
 $host = 'localhost';
 $db   = 'stockify';
-$user = 'treyfoster'; 
-$pass = 'Sultans@Swing99';
+$user = 'stockify_admin';
+$pass = 'GEGdAcS72ErF4AlG';
 $charset = 'utf8';
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $opt = [

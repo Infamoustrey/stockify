@@ -1,4 +1,6 @@
 <?php
+error_reporting();
+ini_set("display_errors", 1);
 
 require_once '../db/quickpdo.php';
 
