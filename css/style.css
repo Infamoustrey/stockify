@@ -1,5 +1,6 @@
 html, body{
     overflow-x: hidden;
+    font-family: 'Roboto', sans-serif;
 }
 
 /* The switch - the box around the slider */
